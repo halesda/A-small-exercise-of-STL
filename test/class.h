@@ -67,6 +67,26 @@ struct test
 		return *p < *rhs.p;
 	}
 
+	friend ostream& operator <<(ostream& os,const test& rhs) noexcept
+	{
+		return os << *rhs.p;
+	}
+
+	friend istream& operator >>(istream& is,test& rhs) noexcept
+	{
+		int a = 0;
+		cin >> a;
+		if(rhs.p)
+		{
+			*rhs.p = a;
+		}
+		else
+		{
+			rhs.p = new int(a);
+		}
+		return is;
+	}
+
 
 	int* p;
 };
