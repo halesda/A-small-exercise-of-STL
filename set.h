@@ -79,12 +79,12 @@ namespace my_stl
 					return _con.find(key);
 				}
 
-				bool operator==(const set& rhs) noexcept
+				bool operator==(const set& rhs) const noexcept
 				{
 					return _con == rhs._con;
 				}
 
-				bool operator!=(const set& rhs) noexcept
+				bool operator!=(const set& rhs) const noexcept
 				{
 					return _con != rhs._con;
 				}
@@ -104,6 +104,11 @@ namespace my_stl
 					iterator i = _con.find(key);
 					assert(i != end());
 					return i->second;
+				}
+
+				void swap(set& rhs) noexcept
+				{
+					_con.swap(rhs._con);
 				}
 
 			private:

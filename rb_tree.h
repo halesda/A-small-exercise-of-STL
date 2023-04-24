@@ -27,7 +27,6 @@ namespace my_stl
 	template <class Key, class Value,class Comp>
 		class _rb_tree_iterator;
 
-
 	template <class Key, class Value>
 		struct _rb_tree_node;
 
@@ -60,7 +59,7 @@ namespace my_stl
 
 				//内嵌类型声明，为了萃取和类型安全
 				friend class rb_tree<Key, Value,Comp,allocator<pair<Key,Value>>>;
-				using _pnode_ = _rb_tree_node<Key, Value>*;
+				using _pnode = _rb_tree_node<Key, Value>*;
 				using _node_ = _rb_tree_node<Key,Value>;
 				using value_type = pair<Key,Value>;
 				using iterator_category = bidirectional_iterator_tag;
@@ -75,7 +74,7 @@ namespace my_stl
 				inline ~_rb_tree_iterator()noexcept {}
 
 				//构造函数，使用一个红黑树节点指针构造
-				inline _rb_tree_iterator(_pnode_ pt = nullptr)noexcept :_node(pt) {}
+				inline _rb_tree_iterator(_pnode pt = nullptr)noexcept :_node(pt) {}
 
 				//拷贝构造
 				inline _rb_tree_iterator(const _rb_tree_iterator& rhs)noexcept :_node(rhs._node) {}
@@ -149,7 +148,7 @@ namespace my_stl
 					}
 					else
 					{
-						_pnode_ y = _node->_parent;
+						_pnode y = _node->_parent;
 						while (_node == y->_right)
 						{
 							_node = y;
@@ -180,7 +179,7 @@ namespace my_stl
 					}
 					else if (_node->_left)
 					{
-						_pnode_ y = _node->_left;
+						_pnode y = _node->_left;
 						while (y->_right)
 						{
 							y = y->_right;
@@ -189,7 +188,7 @@ namespace my_stl
 					}
 					else
 					{
-						_pnode_ y = _node->_parent;
+						_pnode y = _node->_parent;
 						while (_node == y->_left)
 						{
 							_node = y;
@@ -222,7 +221,7 @@ namespace my_stl
 
 			private:
 
-				_pnode_ _node;  //实现迭代器维护一个红黑树节点指针
+				_pnode _node;  //实现迭代器维护一个红黑树节点指针
 		};
 
 
@@ -250,21 +249,21 @@ namespace my_stl
 				static_assert(is_same_v<value_type,typename iterator::value_type>);
 
 				//默认构造函数,构造一棵空树
-				inline rb_tree() noexcept:_n(0),_header_(__allocate_node_())
+				inline rb_tree() noexcept:_n(0),_header(__allocate_node_())
 				{
-					_header_->_parent = nullptr;
-					_header_->_left = _header_;
-					_header_->_right = _header_;
-					_header_->_color = red;
+					_header->_parent = nullptr;
+					_header->_left = _header;
+					_header->_right = _header;
+					_header->_color = red;
 				}
 
 				//拷贝构造函数
-				inline rb_tree(const rb_tree& rhs) noexcept : _n(0),_header_(__allocate_node_())			
+				inline rb_tree(const rb_tree& rhs) noexcept : _n(0),_header(__allocate_node_())			
 				{
-					_header_->_parent = nullptr;
-					_header_->_left = _header_;
-					_header_->_right = _header_;
-					_header_->_color = red;
+					_header->_parent = nullptr;
+					_header->_left = _header;
+					_header->_right = _header;
+					_header->_color = red;
 					for(auto i = rhs.begin();i != rhs.end();++i)
 					{
 						insert(i->first,i->second);
@@ -289,19 +288,19 @@ namespace my_stl
 				inline ~rb_tree()noexcept
 				{
 					clear();
-					_allo.deallocate(_header_);
+					_allo.deallocate(_header);
 				}
 
 				//返回首迭代器
 				inline iterator begin()const noexcept
 				{
-					return iterator(_header_->_left);
+					return iterator(_header->_left);
 				}
 
 				//返回尾迭代器
 				inline iterator end()const noexcept
 				{
-					return iterator(_header_);
+					return iterator(_header);
 				}
 
 				//判断树是否为空
@@ -319,7 +318,7 @@ namespace my_stl
 				//获取键值最大的节点
 				inline iterator max() const noexcept
 				{
-					_pnode_ x = _header_->_parent;
+					_pnode x = _header->_parent;
 					if(x)
 					{
 						x = _maximum(x);
@@ -330,7 +329,7 @@ namespace my_stl
 				//获取键值最小的节点
 				inline iterator min() const noexcept
 				{
-					_pnode_ x = _header_->_parent;
+					_pnode x = _header->_parent;
 					if (x)
 					{
 						x = _minimum(x);
@@ -341,10 +340,10 @@ namespace my_stl
 				// 清空整颗树
 				inline void clear() noexcept
 				{
-					_clear(_header_->_parent);
-					_header_->_parent = nullptr;
-					_header_->_left = _header_;
-					_header_->_right = _header_;
+					_clear(_header->_parent);
+					_header->_parent = nullptr;
+					_header->_left = _header;
+					_header->_right = _header;
 					_n = 0;
 				}
 
@@ -357,8 +356,8 @@ namespace my_stl
 				//插入一个节点
 				iterator insert(const pair<Key, Value>& v) noexcept
 				{
-					_pnode_ y = _header_;
-					_pnode_ x = _header_->_parent; 
+					_pnode y = _header;
+					_pnode x = _header->_parent; 
 					bool flag = true;
 					while (x != nullptr)                //从根节点开始往下找插入点
 					{
@@ -392,7 +391,7 @@ namespace my_stl
 				//查找键值为key的节点
 				inline iterator find(const Key& key) const noexcept
 				{
-					_pnode_ y = _header_,x = _header_->_parent;
+					_pnode y = _header,x = _header->_parent;
 					while(x)
 					{
 						if(!_comp(x->_pair.first,key))
@@ -430,7 +429,7 @@ namespace my_stl
 				//删除一个节点
 				inline void erase(iterator position) noexcept
 				{
-					_pnode_ y = _rb_tree_rebalance_for_erase(position._node,_header_->_parent,_header_->_left,_header_->_right);
+					_pnode y = _rb_tree_rebalance_for_erase(position._node,_header->_parent,_header->_left,_header->_right);
 					_destroy_node_(y);
 					--_n;
 				}
@@ -466,10 +465,10 @@ namespace my_stl
 
 			protected:
 
-				using _pnode_ = _rb_tree_node<Key, Value>*;
+				using _pnode = _rb_tree_node<Key, Value>*;
 
 				//真正执行clear的地方
-				inline void _clear(_pnode_ x) noexcept
+				inline void _clear(_pnode x) noexcept
 				{
 					if(x == nullptr)
 					{
@@ -481,23 +480,23 @@ namespace my_stl
 				}
 
 				//申请一个红黑树节点
-				inline _pnode_ __allocate_node_() noexcept
+				inline _pnode __allocate_node_() noexcept
 				{
-					_pnode_ pt = static_cast<_pnode_>(_allo.allocate(sizeof(_rb_tree_node<Key, Value>)));
+					_pnode pt = static_cast<_pnode>(_allo.allocate(sizeof(_rb_tree_node<Key, Value>)));
 					return pt;
 				}
 
 				//构造一个红黑树节点
-				inline _pnode_ _create_node_(const Key& k, const Value& v) noexcept
+				inline _pnode _create_node_(const Key& k, const Value& v) noexcept
 				{
-					_pnode_ pt = __allocate_node_();
+					_pnode pt = __allocate_node_();
 					_allo.construct(&pt->_pair.second, v);
 					_allo.construct(&pt->_pair.first, k);
 					return pt;
 				}
 
 				//摧毁一个红黑树节点
-				inline void _destroy_node_(_pnode_ x) noexcept
+				inline void _destroy_node_(_pnode x) noexcept
 				{
 					_allo.destroy(&x->_pair.second);
 					_allo.destroy(&x->_pair.first);
@@ -506,49 +505,49 @@ namespace my_stl
 
 				//x_为新值插入点,y_为插入点父节点,v为值
 				//真正执行插入的地方
-				iterator _insert_(_pnode_ x_, _pnode_ y_, const pair<Key, Value>& v) noexcept
+				iterator _insert_(_pnode x_, _pnode y_, const pair<Key, Value>& v) noexcept
 				{
-					_pnode_ x = x_, y = y_, z = nullptr;
-					if (y == _header_ || x != nullptr || _comp(v.first, y->_pair.first))
+					_pnode x = x_, y = y_, z = nullptr;
+					if (y == _header || x != nullptr || _comp(v.first, y->_pair.first))
 					{
 						z = _create_node_(v.first, v.second);
 						y->_left = z;
-						if (y == _header_)
+						if (y == _header)
 						{
-							_header_->_parent = z;
-							_header_->_right = z;
+							_header->_parent = z;
+							_header->_right = z;
 						}
-						else if (y == _header_->_left)
+						else if (y == _header->_left)
 						{
-							_header_->_left = z;
+							_header->_left = z;
 						}
 					}
 					else
 					{
 						z = _create_node_(v.first, v.second);
 						y->_right = z;
-						if (y == _header_->_right)
+						if (y == _header->_right)
 						{
-							_header_->_right = z;
+							_header->_right = z;
 						}
 					}
 					z->_parent = y;
 					z->_left = nullptr;
 					z->_right = nullptr;
-					_rb_tree_rebalance(z, _header_->_parent);
+					_rb_tree_rebalance(z, _header->_parent);
 					++_n;
 					return iterator(z);
 				}
 
 				//红黑树插入后的调整
-				void _rb_tree_rebalance(_pnode_ x, _pnode_& root) noexcept
+				void _rb_tree_rebalance(_pnode x, _pnode& root) noexcept
 				{
 					x->_color = red;  //新节点一定为红
 					while (x != root && x->_parent->_color == red)
 					{
 						if (x->_parent == x->_parent->_parent->_left)
 						{
-							_pnode_ y = x->_parent->_parent->_right;
+							_pnode y = x->_parent->_parent->_right;
 							if (y && y->_color == red)
 							{
 								x->_parent->_color = black;
@@ -570,7 +569,7 @@ namespace my_stl
 						}
 						else
 						{
-							_pnode_ y = x->_parent->_parent->_left;
+							_pnode y = x->_parent->_parent->_left;
 							if (y && y->_color == red)
 							{
 								x->_parent->_color = black;
@@ -595,9 +594,9 @@ namespace my_stl
 				}
 
 				//左旋转
-				void _rb_tree_rotate__left(_pnode_ x, _pnode_& root) noexcept
+				void _rb_tree_rotate__left(_pnode x, _pnode& root) noexcept
 				{
-					_pnode_ y = x->_right;
+					_pnode y = x->_right;
 					x->_right = y->_left;
 					if(y->_left)
 					{
@@ -621,9 +620,9 @@ namespace my_stl
 				}
 
 				//右旋转
-				void _rb_tree_rotate__right(_pnode_ x, _pnode_& root) noexcept
+				void _rb_tree_rotate__right(_pnode x, _pnode& root) noexcept
 				{
-					_pnode_ y = x->_left;
+					_pnode y = x->_left;
 					x->_left = y->_right;
 					if (y->_right)
 					{
@@ -647,9 +646,9 @@ namespace my_stl
 				}
 
 				//红黑树删除一个节点过后的调整
-				_pnode_ _rb_tree_rebalance_for_erase(_pnode_ z,_pnode_& root,_pnode_& _leftmost,_pnode_& _rightmost) noexcept
+				_pnode _rb_tree_rebalance_for_erase(_pnode z,_pnode& root,_pnode& _leftmost,_pnode& _rightmost) noexcept
 				{
-					_pnode_ y = z,x = nullptr,x__parent = nullptr;
+					_pnode y = z,x = nullptr,x__parent = nullptr;
 					if(y->_left == nullptr)
 					{
 						x = y->_right;
@@ -756,7 +755,7 @@ namespace my_stl
 						{
 							if (x == x__parent->_left)
 							{
-								_pnode_ w = x__parent->_right;
+								_pnode w = x__parent->_right;
 								if (w->_color == red)
 								{
 									w->_color = black;
@@ -795,7 +794,7 @@ namespace my_stl
 							}
 							else
 							{               
-								_pnode_ w = x__parent->_left;
+								_pnode w = x__parent->_left;
 								if (w->_color == red)
 								{
 									w->_color = black;
@@ -842,7 +841,7 @@ namespace my_stl
 				}
 
 				//返回x的最左边子节点
-				static inline _pnode_ _minimum(_pnode_ x) noexcept
+				static inline _pnode _minimum(_pnode x) noexcept
 				{
 					if(x)
 					{
@@ -855,7 +854,7 @@ namespace my_stl
 				}
 
 				//返回x的最右边子节点
-				static inline _pnode_ _maximum(_pnode_ x) noexcept
+				static inline _pnode _maximum(_pnode x) noexcept
 				{
 					if(x)
 					{
@@ -870,12 +869,12 @@ namespace my_stl
 				//真正执行判断一个树是不是红黑树的地方
 				bool _is_rb_tree() const noexcept
 				{
-					if(_n == 0 || _header_->_left == _header_)
+					if(_n == 0 || _header->_left == _header)
 					{
-						return _n == 0 && _header_->_left == _header_ && _header_->_right == _header_;
+						return _n == 0 && _header->_left == _header && _header->_right == _header;
 					}
-					size_t len = _black_count(_header_->_left,_header_->_parent);
-					_pnode_ x = nullptr,L = nullptr,R = nullptr;
+					size_t len = _black_count(_header->_left,_header->_parent);
+					_pnode x = nullptr,L = nullptr,R = nullptr;
 					for(iterator i = begin();i != end();++i)
 					{
 						x = i._node;
@@ -896,15 +895,15 @@ namespace my_stl
 						{
 							return false;
 						}
-						if(!L && !R && _black_count(x,_header_->_parent) != len)
+						if(!L && !R && _black_count(x,_header->_parent) != len)
 						{
 							return false;
 						}
-						if(_header_->_left != _minimum(_header_->_parent))
+						if(_header->_left != _minimum(_header->_parent))
 						{
 							return false;
 						}
-						if(_header_->_right != _maximum(_header_->_parent))
+						if(_header->_right != _maximum(_header->_parent))
 						{
 							return false;
 						}
@@ -913,7 +912,7 @@ namespace my_stl
 				}
 
 				//统计黑色节点数量
-				size_t _black_count(_pnode_ node,_pnode_ root) const noexcept
+				size_t _black_count(_pnode node,_pnode root) const noexcept
 				{
 					if(node == nullptr)
 					{
@@ -934,7 +933,7 @@ namespace my_stl
 				}
 
 			private:
-				_pnode_ _header_;   //头节点，是一个实现技巧
+				_pnode _header;   //头节点，是一个实现技巧
 				size_t _n;	   //红黑树节点数量
 				Alloc _allo;  //空间配置器
 				Comp _comp;  //键值比较规则

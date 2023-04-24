@@ -105,6 +105,11 @@ namespace my_stl
 					return _con != rhs._con;
 				}
 
+				void swap(map& rhs) noexcept
+				{
+					_con.swap(rhs._con);
+				}
+
 			private:
 				Container _con;
 		};
