@@ -18,7 +18,6 @@ set相关泛型算法（如set_union等等）可以有线性时间实现。
 如此一来唯一失效的（invalidated）的迭代器就只是那些referring to the deleted node.
 */
 
-
 //类声明
 template<class Key, class Value,class Comp,class Alloc>
 class rb_tree;
@@ -438,6 +437,29 @@ public:
 		inline bool is_rb_tree() const noexcept
 		{
 			return _is_rb_tree();
+		}
+
+		bool operator==(const rb_tree& rhs) noexcept
+		{
+			if(size() != rhs.size())
+			{
+				return false;
+			}
+			auto i = begin();
+			auto j = rhs.begin();
+			for(;i != end();++i,++j)
+			{
+				if(*i != *j)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		bool operator!=(const rb_tree& rhs) noexcept
+		{
+			return !(*this != rhs);
 		}
 
 	protected:

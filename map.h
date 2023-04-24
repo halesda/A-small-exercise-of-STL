@@ -93,6 +93,16 @@ namespace my_stl
 					_con.erase(key);
 				}
 
+				bool operator==( const map& rhs) noexcept
+				{
+					return _con == rhs._con;
+				}
+
+				bool operator!=(const map& rhs) noexcept
+				{
+					return _con != rhs._con;
+				}
+
 			private:
 				Container _con;
 		};

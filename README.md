@@ -26,7 +26,9 @@ algorithm头文件里实现了大部分的STL标准库的算法，而且也可�
 迭代器是一种设计模式，提供了外界能够对容器的元素进行操作而不暴露容器内部设计的方法。迭代器也是较为容易实现，我仅仅实现了一部分常用的迭代器。。。
 
 
-（6）容器，我目前实现了vector，string，list，map，set，stack，queue，priority_queue等容器，目前deque没有实现，正在学习如何实现中...
+（6）容器，我目前实现了vector，string，list，map，set，stack，queue，priority_queue，哈希表等容器，目前deque没有实现，正在学习如何实现中...
 
+
+还有重要的一点是我使用了type traits技术，在编译期进行分支选择。为此我写了一些常用的type traits，并且配合if constexpr在编译期进行选择，加强了模板的效率。其实这些type traits就是一些模板特化和偏特化，很轻松就能够写出来，这个是STL标准库使用的技巧之一。
 
 除了STL的内容我还写了我学习到的数据结构和算法，如哈夫曼树，二叉搜索树等等，就当作是我的学习笔记吧。
