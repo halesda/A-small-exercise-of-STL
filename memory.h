@@ -196,6 +196,20 @@ namespace my_stl
 			return first;
 		}
 
+	//copy_backward
+	template<class BidirectionalIterator1,class BidirectionalIterator2>
+		inline BidirectionalIterator2 copy_backward(BidirectionalIterator1 first,BidirectionalIterator1 last,BidirectionalIterator2 result) noexcept
+		{
+			--last;
+			--first;
+			--result;
+			for(;last != first;--last,--result)
+			{
+				*result = *last;
+			}
+			return result;
+		}
+
 	//move
 	template <typename T>
 		inline typename remove_reference<T>::type&& move(T&& arg) noexcept

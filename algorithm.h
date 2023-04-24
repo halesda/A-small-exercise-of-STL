@@ -185,6 +185,57 @@ namespace my_stl
 			_sort_quick_sort(++left,last,comp);
 		}
 
+
+	//insert sort
+	template<class RandomAccessIterator,class T>
+		inline void __unguarded_linear_insert(RandomAccessIterator last,T value) noexcept
+		{
+			RandomAccessIterator next = last;
+			--next;
+			while(value < *next)
+			{
+				*last = *next;
+				last = next;
+				--next;
+			}
+			*last = value;
+		}
+
+	//insert sort
+	template<class RandomAccessIterator>
+		inline void __insert_sort(RandomAccessIterator first,RandomAccessIterator last) noexcept
+		{
+			using _valtype = typename iterator_traits<RandomAccessIterator>::value_type;
+			_valtype value = *last;
+			if(value < *first)
+			{
+				copy_backward(first,last,last + 1);
+				*first = value;
+			}
+			else
+			{
+				__unguarded_linear_insert(last,value);
+			}
+		}
+
+	//insert sort
+	template<class RandomAccessIterator>
+		inline void _insert_sort(RandomAccessIterator first,RandomAccessIterator last) noexcept
+		{
+			if(first == last)
+			{
+				return;
+			}
+			using _itertype = typename iterator_traits<RandomAccessIterator>::iterator_category;
+			if constexpr(is_random_access_iterator_v<_itertype>)
+			{
+				for(auto i = first + 1;i != last;++i)
+				{
+					__insert_sort(first,i);
+				}
+			}
+		}
+
 	//sort
 	//使用自定义二元谓词comp进行排序
 	template<class ForwardIterator,class Comp>
@@ -198,7 +249,6 @@ namespace my_stl
 			}
 			else
 			{
-
 			}
 		}
 
@@ -1101,6 +1151,7 @@ namespace my_stl
 		}
 
 	//mismatch
+	//找出第一个不匹配点
 	template<class InputIterator1,class InputIterator2,class Op>
 		pair<InputIterator1,InputIterator2> mismatch(InputIterator1 first1,InputIterator1 last1,InputIterator2 first2,InputIterator2 last2,const Op& op) noexcept
 		{
@@ -1111,8 +1162,23 @@ namespace my_stl
 			return pair<InputIterator1,InputIterator2>(first1,first2);
 		}
 
-
-
+	//random_shuffle
+	//对区间内的元素随机重新排序
+	template<class RandomAccessIterator>
+		inline void random_shuffle(RandomAccessIterator first,RandomAccessIterator last) noexcept
+		{
+			if(first == last)
+			{
+				return;
+			}
+			using _dtype = typename iterator_traits<RandomAccessIterator>::distance_type;
+			using _itertype = typename iterator_traits<RandomAccessIterator>::iterator_category;
+			static_assert(is_random_access_iterator_v<_itertype>);
+			for(auto i = first;i != last;++i)
+			{
+				_iterator_value_swap(i,first + _dtype(rand() % ((i - first) + 1)));
+			}
+		}
 
 
 };

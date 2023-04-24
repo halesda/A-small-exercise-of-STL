@@ -1,26 +1,27 @@
 #include<iostream>
 #include"class.h"
-#include"../set.h"
-#include"../map.h"
-using namespace std;
+#include"../vector.h"
+using namespace my_stl;
 
 int main()
 {
 
-	my_stl::set<test> t1;
-	my_stl::map<test,test> m1;
-	for(int i = 0;i < 100;++i)
+	vector<test> t;
+	for(int i = 10;i > 0;--i)
 	{
-		t1.insert(test(i));
-		m1.insert(test(i),test(i));
+		t.push_back(test(i));
 	}
-	auto i = t1.begin();
-	auto j = m1.begin();
-	for(;i != t1.end() && j != m1.end();++i,++j)
+	for(auto i = t.begin();i != t.end();++i)
 	{
-		cout << i->first <<"  " << i->second << endl;
-		cout << j->first <<"  " << j->second << endl;
+		cout << *i << endl;
 	}
+	_insert_sort(t.begin(),t.end());
+	random_shuffle(t.begin(),t.end());
+	for(auto i = t.begin();i != t.end();++i)
+	{
+		cout << *i << endl;
+	}
+
 
 	return 0;
 }
