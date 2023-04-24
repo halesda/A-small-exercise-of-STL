@@ -11,7 +11,9 @@ namespace my_stl
 		{
 			public:
 
-				using value_type = pair<Key,Value>;
+				using value_type = typename Container::value_type;
+				using reference = typename Container::reference;
+				using pointer = typename Container::pointer;
 				using key_type = Key;
 				using mapped_type = Value;
 				using size_type = size_t;
@@ -71,7 +73,7 @@ namespace my_stl
 					iterator i = find(key);
 					if(i == end())
 					{
-						i = insert(key,Value());
+						i = _con.insert(key,Value());
 					}
 					return i->second;
 				}

@@ -13,6 +13,7 @@ namespace my_stl
 		}
 
 	//construct
+	//简单的construct函数，根据类型是不是pod类型，选择不同的构造方法
 	template<class ForwardIterator,class T>
 		inline void construct(ForwardIterator first,ForwardIterator last,const T& val) noexcept
 		{

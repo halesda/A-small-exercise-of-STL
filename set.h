@@ -1,9 +1,10 @@
 #ifndef _SET_H_
 #define _SET_H_
+#include"rb_tree.h"
 namespace my_stl
 {
-#include"rb_tree.h"
-
+	//简易set容器实现，底层容器为红黑树，具有自动排序的功能
+	//插入，查找，删除时间复杂度都是O(logn)
 	template<class Key,class Comp = less<Key>,class Container = rb_tree<Key,Key,Comp>>
 		class set
 		{
@@ -12,8 +13,8 @@ namespace my_stl
 				using iterator = typename Container::iterator;
 				using key_type = Key;
 				using value_type = typename Container::value_type;
-				using reference = value_type&;
-				using pointer = value_type*;
+				using reference = typename Container::reference;
+				using pointer = typename Container::pointer;
 				using size_type = size_t;
 				using distance_type = ptrdiff_t;
 
@@ -58,11 +59,11 @@ namespace my_stl
 					return _con.insert(key,key);
 				}
 
-				iterator insert(const value_type& pair) noexcept
+				iterator insert(const reference pair) noexcept
 				{
-					return _con.insert(pair);
+					return _con.insert(pair.first,pair.first);
 				}
-				
+
 				void erase(iterator pos) noexcept
 				{
 					return _con.erase(pos);
@@ -90,17 +91,17 @@ namespace my_stl
 
 				Key& operator[](const Key& key) noexcept
 				{
-					iterator i = find(key);
+					iterator i = _con.find(key);
 					if(i == end())
 					{
-						i = _con.insert(key,Key());
+						i = _con.insert(key,key);
 					}
 					return i->second;
 				}
 
 				Key& operator[](const Key& key) const noexcept
 				{
-					iterator i = find(key);
+					iterator i = _con.find(key);
 					assert(i != end());
 					return i->second;
 				}

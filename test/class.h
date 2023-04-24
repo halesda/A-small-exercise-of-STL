@@ -1,5 +1,7 @@
 
 //测试使用的类
+//
+using std::istream,std::ostream,std::cin,std::cout;
 
 struct test
 {
