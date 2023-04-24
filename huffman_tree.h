@@ -159,7 +159,7 @@ namespace my_stl
 			private:
 
 				priority_queue<_pnode,compare,vector<_pnode>> _q; //使用一个优先级队列构建哈夫曼树
-				size_t minimun_code = 114514;    //技巧
+				size_t minimun_code = 114514;      //技巧
 				unordered_map<char,string> _m1;   //保存编码和解码的字符串
 				unordered_map<string,char> _m2;   //保存编码和解码的字符串
 				_pnode _root;       //树根

@@ -19,7 +19,6 @@ namespace my_stl
 		using const_pointer = const T*;
 		using const_reference = const T&;
 	
-
 		//申请内存空间
 		inline static void* allocate(size_t size) noexcept
 		{
