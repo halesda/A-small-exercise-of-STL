@@ -253,6 +253,10 @@ public:
 		}
 	}
 
+	graph_2(const graph_2& rhs) = delete;
+
+	graph_2& operator= (const graph_2& rhs) = delete;
+
 	~graph_2() noexcept
 	{
 		if(!_edges.empty())
@@ -287,8 +291,6 @@ public:
 		vector<edge*> e_new;
 		v_new.push_back(_vertexs[rand() % _vertexs.size()]);
 		sort(_edges.begin(),_edges.end(),[](edge* l,edge* r){return l->weight < r->weight;});
-
-		
 		while(v_new.size() != _vertexs.size())
 		{
 			for(auto c : _edges)
@@ -314,7 +316,6 @@ public:
 				}
 			}
 		}
-
 		for(auto c : e_new)
 		{
 			cout << c->weight << "  ";

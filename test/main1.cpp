@@ -1,31 +1,32 @@
 #include<iostream>
-#include"../graph.h"
+#include"../algorithm.h"
+#include<algorithm>
+#include<vector>
 using namespace std;
 
 int main()
 {
 
+	srand(time(0));
+	int array[10000];
+	for(int i = 0;i < 10000;++i)
+	{
+		array[i] = rand() % 100000;
+	}
+	vector<int> v(array,array + my_stl::array_size(array));
+	my_stl::select_sort(array,array + my_stl::array_size(array));
+	sort(v.begin(),v.end());
 
-	graph_2 g(9);
+	for(int i = 0;i < 10000;++i)
+	{
+		if(v[i] != array[i])
+		{
+			cout << "false" << endl;
+		}
+	}
+	cout << "true" << endl;
 
-	g.set(0,5,4);
-	g.set(0,1,3);
-	g.set(1,6,6);
-	g.set(1,8,5);
-	g.set(1,2,8);
-	g.set(2,8,2);
-	g.set(2,3,12);
-	g.set(3,6,14);
-	g.set(3,7,6);
-	g.set(3,4,10);
-	g.set(3,8,11);
-	g.set(4,7,1);
-	g.set(4,5,18);
-	g.set(5,6,7);
-	g.set(6,7,9);
-	
-	g.prim();
-	g.kruskal();
+
 
 	return 0;
 }

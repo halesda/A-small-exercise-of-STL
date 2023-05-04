@@ -1180,6 +1180,57 @@ namespace my_stl
 			}
 		}
 
+	//冒泡排序
+	template<class ForwardIterator>
+		inline void bubble_sort(ForwardIterator first,ForwardIterator last) noexcept
+		{
+			if(distance(first,last) < 2)
+			{
+				return;
+			}
+			auto l = last;
+			for(auto i = first;i != last;++i,--l)
+			{
+				for(auto j = first;j != l;)
+				{
+					auto y = j;
+					if(*y > *(++j))
+					{
+						swap(*y,*j);
+					}
+				}
+			}
+		}
+
+	//选择排序
+	template<class ForwardIterator>
+		inline void select_sort(ForwardIterator first,ForwardIterator last) noexcept
+		{
+			if(distance(first,last) < 2)
+			{
+				return;
+			}
+			for(auto i = first;i != last;++i)
+			{
+				auto min = i;
+				for(auto j = i;j != last;++j)
+				{
+					if(*j < *min)
+					{
+						min = j;
+					}
+				}
+				if(min != i)
+				{
+					swap(*min,*i);
+				}
+			}
+		}
+
+
+	//希尔排序
+
+
 
 };
 #endif
