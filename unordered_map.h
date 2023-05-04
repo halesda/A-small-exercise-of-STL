@@ -95,8 +95,7 @@ namespace my_stl
 	static inline size_t _GET_NEXT_PRIME_(size_t now) noexcept
 	{
 		auto ii = lower_bound(prime_list,prime_list + 28,now);
-		++ii;
-		if(ii >= prime_list && ii < prime_list + PRIME_COUNT)
+		if(++ii;ii >= prime_list && ii < prime_list + PRIME_COUNT)
 		{
 			return *ii;
 		}
